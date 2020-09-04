@@ -2,13 +2,14 @@
 const program = require('commander');
 
 const runApplication = async () => {
+  program.name('t');
   program.version('0.0.1');
 
   //program options
   program
-    .option('--user <user>', 'git user', false)
+    .option('-u, --user <user>', 'git user', false)
     .option('-d, --day <YYYY-MM-DD>', 'date of specific day', false)
-    .option('--repository-path <path>', 'repository path', __dirname);
+    .option('-p, --path <path>', 'repository path', __dirname);
 
   program.parse(process.argv);
 

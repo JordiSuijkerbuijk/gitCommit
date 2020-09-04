@@ -1,5 +1,5 @@
 {
-  "name": "gitCommit",
+  "name": "gitcommit",
   "version": "1.0.0",
   "description": "Get commits",
   "main": "./src/index.js",
@@ -17,9 +17,10 @@
   },
   "license": "ISC",
   "bin": {
-    "gitCommit": "./src/index.js"
+    "git-commit": "./src/index.js"
   },
   "dependencies": {
-    "commander": "^5.0.0"
+    "commander": "^5.0.0",
+    "dlv": "^1.1.3"
   }
 }
