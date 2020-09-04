@@ -1,0 +1,25 @@
+{
+  "name": "gitCommit",
+  "version": "1.0.0",
+  "description": "Get commits",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "printWidth": 100
+  },
+  "author": {
+    "name": "Jordi Suijkerbuijk",
+    "url": "https://github.com/jsuijkerbuijk"
+  },
+  "license": "ISC",
+  "bin": {
+    "gitCommit": "./src/index.js"
+  },
+  "dependencies": {
+    "commander": "^5.0.0"
+  }
+}
