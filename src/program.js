@@ -5,7 +5,8 @@ const exec = util.promisify(require('child_process').exec);
 const dlv = require('dlv');
 
 let _jsonResponse,
-  format = true;
+  format,
+  user = true;
 const result = {
   directories: [],
   entries: [],
@@ -31,7 +32,7 @@ async function getGitDirectory(directories, callback = () => {}) {
     if (directory.match(/\.git/)) {
       counts[0] += 1;
       const { stdout, stderr } = await exec(
-        `cd ${directory}; git log  --pretty=format:"${f}" --no-merges --reverse`
+        `cd ${directory}; git log  --pretty=format:"${f}" --no-merges --reverse --author="${user}"`
       );
 
       const isValid = !stderr && stdout !== '';
@@ -55,23 +56,22 @@ async function getGitDirectory(directories, callback = () => {}) {
   }
 }
 
-async function program(program = {}, jsonResponse = true, cli = false) {
-  // const day = dlv(program, 'day', '');
+async function program(program = {}, cli = false) {
   format = dlv(program, 'format', '%an <%ae> - %s');
-  _jsonResponse = program.json || jsonResponse;
+  _jsonResponse = true;
+  user = program.user ? program.user : '.*';
   const path = dlv(program, 'path', '');
 
   const directories = getDirectoriesFromPath(path);
 
-  if (_jsonResponse === false) return getGitDirectory(directories);
-
   return new Promise((resolve) => {
     getGitDirectory(directories, () => {
-      if (cli) console.log(result.entries);
+      if (cli) {
+        if (result.entries.length > 1) result.entries.map((item) => console.log(item.commit));
+      }
       return resolve(result);
     });
   });
-  // return new Promise((resolve) => {});
 }
 
 module.exports = program;

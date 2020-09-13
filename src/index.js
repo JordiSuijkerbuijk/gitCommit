@@ -14,12 +14,12 @@ const runApplication = async () => {
       '--format <format>',
       'formats the git output (default is "%an <%ae> - %s"',
       '%an <%ae> - %s'
-    )
-    .option('-j, --json', 'return a json response', false);
+    );
+  // .option('-j, --json', 'return a json response', false);
 
   program.parse(process.argv);
 
-  require('./program')(program, false, true);
+  require('./program')(program, true);
 };
 
 runApplication();
