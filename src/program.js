@@ -7,6 +7,7 @@ const dlv = require('dlv');
 let _jsonResponse,
   format,
   user = true;
+
 const result = {
   directories: [],
   entries: [],
@@ -28,7 +29,7 @@ async function getGitDirectory(directories, callback = () => {}) {
   for (let i = 0; i < directories.length; i += 1) {
     const directory = directories[i];
     const appendForSplit = '|@|';
-    const f = `${format}${_jsonResponse ? appendForSplit : ''}`;
+    const f = `${format}${appendForSplit}`;
     if (directory.match(/\.git/)) {
       counts[0] += 1;
       const { stdout, stderr } = await exec(
@@ -67,7 +68,7 @@ async function program(program = {}, cli = false) {
   return new Promise((resolve) => {
     getGitDirectory(directories, () => {
       if (cli) {
-        if (result.entries.length > 1) result.entries.map((item) => console.log(item.commit));
+        if (result.entries.length) result.entries.map((item) => console.log(item.commit));
       }
       return resolve(result);
     });
