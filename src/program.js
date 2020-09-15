@@ -6,6 +6,7 @@ const dlv = require('dlv');
 
 let _jsonResponse,
   format,
+  day,
   user = true;
 
 const result = {
@@ -28,8 +29,7 @@ let counts = [0, 0];
 async function getGitDirectory(directories, callback = () => {}) {
   for (let i = 0; i < directories.length; i += 1) {
     const directory = directories[i];
-    const appendForSplit = '|@|';
-    const f = `${format}${appendForSplit}`;
+    const f = `${format}|@|`;
     if (directory.match(/\.git/)) {
       counts[0] += 1;
       const { stdout, stderr } = await exec(
@@ -41,7 +41,7 @@ async function getGitDirectory(directories, callback = () => {}) {
 
       if (_jsonResponse && isValid) {
         result.directories.push(directory);
-        const regex = new RegExp(`\n|${appendForSplit}`, 'g');
+        const regex = new RegExp(`\n||@|`, 'g');
         result.entries.push(
           ...stdout
             .split(appendForSplit)
@@ -57,19 +57,19 @@ async function getGitDirectory(directories, callback = () => {}) {
   }
 }
 
-async function program(program = {}, cli = false) {
+async function program(program = {}) {
   format = dlv(program, 'format', '%an <%ae> - %s');
-  _jsonResponse = true;
   user = program.user ? program.user : '.*';
+  day = dlv(program, 'day', null)
   const path = dlv(program, 'path', '');
+  _jsonResponse = true;
 
   const directories = getDirectoriesFromPath(path);
 
   return new Promise((resolve) => {
     getGitDirectory(directories, () => {
-      if (cli) {
         if (result.entries.length) result.entries.map((item) => console.log(item.commit));
-      }
+      
       return resolve(result);
     });
   });

@@ -19,7 +19,7 @@ const runApplication = async () => {
 
   program.parse(process.argv);
 
-  require('./program')(program, true);
+  require('./program')(program);
 };
 
 runApplication();

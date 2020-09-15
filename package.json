@@ -1,7 +1,7 @@
 {
   "name": "gitcommit",
   "version": "1.0.0",
-  "description": "Get commits",
+  "description": "Get git commits, credits to Marnix Janssen.",
   "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
