@@ -11,17 +11,25 @@
     "singleQuote": true,
     "printWidth": 100
   },
-  "author": {
-    "name": "Jordi Suijkerbuijk",
-    "url": "https://github.com/jsuijkerbuijk"
-  },
+  "author": "Jordi Suijkerbuijk (https://github.com/jsuijkerbuijk)",
   "license": "ISC",
   "bin": {
-    "git-commit": "./src/index.js"
+    "git-commit": "src/index.js"
   },
   "dependencies": {
     "commander": "^5.0.0",
     "dayjs": "^1.10.7",
-    "dlv": "^1.1.3"
-  }
+    "dlv": "^1.1.3",
+    "git": "^0.1.5",
+    "kleur": "^4.1.4"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JordiSuijkerbuijk/gitCommit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JordiSuijkerbuijk/gitCommit/issues"
+  },
+  "homepage": "https://github.com/JordiSuijkerbuijk/gitCommit#readme"
 }

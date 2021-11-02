@@ -4,11 +4,14 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const dlv = require('dlv');
 const dayjs = require('dayjs');
+const {bold, yellow} = require('kleur');
 
 let _jsonResponse,
   format,
   day,
-  user = true;
+  user = true,
+  formattedSince,
+  formattedUntil;
 
 const result = {
   directories: [],
@@ -32,19 +35,16 @@ function getDirectoriesFromPath(source) {
     .filter(isDirectory);
 }
 
-function gitTimeFormat(date) {
-  return date.format();
-}
-
 let counts = [0, 0];
 
 async function getGitDirectory(directories, callback = () => {}) {
   for (let i = 0; i < directories.length; i += 1) {
     const directory = directories[i];
+
     if (directory.match(/\.git/)) {
       counts[0] += 1;
       const { stdout, stderr } = await exec(
-        `cd ${directory}; git log  --pretty=format:"${format}" --since="${gitTimeFormat(since)}" --until="${gitTimeFormat(until)}" --no-merges --reverse --author="${user}"`
+        `cd ${directory}; git log  --pretty=format:"${format}|@|" --since="${since.format()}" --until="${until.format()}" --author="${user}" --no-merges --reverse`
       );
 
       const isValid = !stderr && stdout !== '';
@@ -55,7 +55,7 @@ async function getGitDirectory(directories, callback = () => {}) {
         const regex = new RegExp(`\n||@|`, 'g');
         result.entries.push(
           ...stdout
-            .split('\n\n')
+            .split('|@|')
             .map((output) => ({ commit: output.replace(regex, ''), directory }))
             .filter((e) => e.commit)
         );
@@ -80,7 +80,22 @@ async function program(program = {}) {
   since = setTime(day ? dayjs(day) : currentDate, {time: 'morning'});
   until = setTime(day ? dayjs(day) : currentDate, {time: 'night'});
 
+  formattedSince = since.format('DD-MM-YYYY');
+  formattedUntil = until.format('DD-MM-YYYY');
+
   const directories = getDirectoriesFromPath(process.cwd());
+
+  console.log(
+    yellow(
+      bold(
+        `Getting git logs for ${formattedSince}${
+          formattedSince !== formattedUntil
+            ? ` to ${formattedUntil}:`
+            : ':'
+        }`
+      )
+    )
+  );
 
   return new Promise((resolve) => {
     getGitDirectory(directories, () => {
