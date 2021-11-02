@@ -3,6 +3,7 @@ const { join } = require('path');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const dlv = require('dlv');
+const dayjs = require('dayjs');
 
 let _jsonResponse,
   format,
@@ -14,6 +15,13 @@ const result = {
   entries: [],
 };
 
+function setTime(date, { time = 'morning' }) {
+  return date
+    .set('hour', time === 'morning' ? 0 : 23)
+    .set('minute', time === 'morning' ? 0 : 59)
+    .set('second', time === 'morning' ? 0 : 59);
+}
+
 function isDirectory(source) {
   return lstatSync(source).isDirectory();
 }
@@ -24,16 +32,19 @@ function getDirectoriesFromPath(source) {
     .filter(isDirectory);
 }
 
+function gitTimeFormat(date) {
+  return date.format();
+}
+
 let counts = [0, 0];
 
 async function getGitDirectory(directories, callback = () => {}) {
   for (let i = 0; i < directories.length; i += 1) {
     const directory = directories[i];
-    const f = `${format}|@|`;
     if (directory.match(/\.git/)) {
       counts[0] += 1;
       const { stdout, stderr } = await exec(
-        `cd ${directory}; git log  --pretty=format:"${f}" --no-merges --reverse --author="${user}"`
+        `cd ${directory}; git log  --pretty=format:"${format}" --since="${gitTimeFormat(since)}" --until="${gitTimeFormat(until)}" --no-merges --reverse --author="${user}"`
       );
 
       const isValid = !stderr && stdout !== '';
@@ -44,7 +55,7 @@ async function getGitDirectory(directories, callback = () => {}) {
         const regex = new RegExp(`\n||@|`, 'g');
         result.entries.push(
           ...stdout
-            .split(appendForSplit)
+            .split('\n\n')
             .map((output) => ({ commit: output.replace(regex, ''), directory }))
             .filter((e) => e.commit)
         );
@@ -61,10 +72,15 @@ async function program(program = {}) {
   format = dlv(program, 'format', '%an <%ae> - %s');
   user = program.user ? program.user : '.*';
   day = dlv(program, 'day', null)
-  const path = dlv(program, 'path', '');
+  // const path = dlv(program, 'path', '');
   _jsonResponse = true;
 
-  const directories = getDirectoriesFromPath(path);
+  const currentDate = dayjs();
+
+  since = setTime(day ? dayjs(day) : currentDate, {time: 'morning'});
+  until = setTime(day ? dayjs(day) : currentDate, {time: 'night'});
+
+  const directories = getDirectoriesFromPath(process.cwd());
 
   return new Promise((resolve) => {
     getGitDirectory(directories, () => {
