@@ -2,7 +2,7 @@
   "name": "jordisgitcommit",
   "version": "1.0.2",
   "description": "Get git commits, credits to Marnix Janssen.",
-  "main": "./src/index.js",
+  "main": "./src/program.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,7 +14,7 @@
   "author": "Jordi Suijkerbuijk (https://github.com/jsuijkerbuijk)",
   "license": "ISC",
   "bin": {
-    "git-commit": "./src/index.js"
+    "git-peek": "./src/index.js"
   },
   "dependencies": {
     "commander": "^5.0.0",
