@@ -23,16 +23,5 @@
     "git": "^0.1.5",
     "kleur": "^4.1.4"
   },
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/JordiSuijkerbuijk/gitCommit.git"
-  },
-  "bugs": {
-    "url": "https://github.com/JordiSuijkerbuijk/gitCommit/issues"
-  },
-  "homepage": "https://github.com/JordiSuijkerbuijk/gitCommit#readme",
-  "publishConfig": {
-    "@jordisuijkerbuijk:registry": "https://npm.pkg.github.com"
-  }
+  "devDependencies": {}
 }

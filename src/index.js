@@ -9,13 +9,11 @@ const runApplication = async () => {
   program
     .option('-u, --user <user>', 'git user', false)
     .option('-d, --day <YYYY-MM-DD>', 'date of specific day', false)
-    .option('-p, --path <path>', 'repository path', __dirname)
     .option(
       '--format <format>',
       'formats the git output (default is "%an <%ae> - %s"',
       '%an <%ae> - %s'
     );
-  // .option('-j, --json', 'return a json response', false);
 
   program.parse(process.argv);
 
