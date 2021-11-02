@@ -1,5 +1,5 @@
 {
-  "name": "gitcommit",
+  "name": "jordisgitcommit",
   "version": "1.0.0",
   "description": "Get git commits, credits to Marnix Janssen.",
   "main": "./src/index.js",
