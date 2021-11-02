@@ -1,6 +1,6 @@
 {
   "name": "jordisgitcommit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Get git commits, credits to Marnix Janssen.",
   "main": "./src/index.js",
   "scripts": {
@@ -14,13 +14,12 @@
   "author": "Jordi Suijkerbuijk (https://github.com/jsuijkerbuijk)",
   "license": "ISC",
   "bin": {
-    "git-commit": "src/index.js"
+    "git-commit": "./src/index.js"
   },
   "dependencies": {
     "commander": "^5.0.0",
     "dayjs": "^1.10.7",
     "dlv": "^1.1.3",
-    "git": "^0.1.5",
     "kleur": "^4.1.4"
   },
   "devDependencies": {}
