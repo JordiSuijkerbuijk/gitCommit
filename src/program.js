@@ -26,26 +26,26 @@ function setTime(date, { time = 'morning' }) {
 let counts = [0, 0];
 
 async function getGitDirectory(callback = () => {}) {
-      counts[0] += 1;
-      const { stdout, stderr } = await exec(
-        `git log  --pretty=format:"${format}|@|" --since="${since.format()}" --until="${until.format()}" --author="${user}" --no-merges --reverse`
-      );
+  counts[0] += 1;
+  const { stdout, stderr } = await exec(
+    `git log  --pretty=format:"${format}|@|" --since="${since.format()}" --until="${until.format()}" --author="${user}" --no-merges --reverse`
+  );
 
-      const isValid = !stderr && stdout !== '';
-      counts[1] += 1;
+  const isValid = !stderr && stdout !== '';
+  counts[1] += 1;
 
-      if (_jsonResponse && isValid) {
-        const regex = new RegExp(`\n||@|`, 'g');
-        result.entries.push(
-          ...stdout
-            .split('|@|')
-            .map((output) => ({ commit: output.replace(regex, '')}))
-            .filter((e) => e.commit)
-        );
-      }
+  if (_jsonResponse && isValid) {
+    const regex = new RegExp(`\n||@|`, 'g');
+    result.entries.push(
+      ...stdout
+        .split('|@|')
+        .map((output) => ({ commit: output.replace(regex, '')}))
+        .filter((e) => e.commit)
+    );
+  }
 
-      if (counts[0] === counts[1]) {
-        callback();
+  if (counts[0] === counts[1]) {
+    callback();
   }
 }
 
